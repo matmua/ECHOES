@@ -1,0 +1,27 @@
+model:
+  path: Qwen/Qwen3-VL-8B-Instruct
+  min_pixels: 65536
+  max_pixels: 1048576
+  max_prompt_tokens: 16384
+data:
+  train: data/prepared/sft_annotated.jsonl
+  validation: data/prepared/validation.jsonl
+  image_root: data/prepared
+optimizer:
+  lr: 0.00001
+  weight_decay: 0.01
+  warmup_ratio: 0.03
+  clip_grad: 1.0
+runtime:
+  seed: 42
+  gradient_checkpointing: true
+  attention_backend: sdpa
+training:
+  output: checkpoints/sft
+  resume: null
+  epochs: 3
+  prompts_per_rank: 4
+  max_new_tokens: 768
+  memory_budget: 128
+  logit_chunk_size: 32
+  save_every: 100

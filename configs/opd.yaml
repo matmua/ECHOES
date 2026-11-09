@@ -1,0 +1,44 @@
+model:
+  path: checkpoints/sft/final
+  min_pixels: 65536
+  max_pixels: 1048576
+  max_prompt_tokens: 16384
+data:
+  train: data/prepared/rl.jsonl
+  validation: data/prepared/validation.jsonl
+  image_root: data/prepared
+  validation_trajectories: 32
+optimizer:
+  lr: 0.000001
+  weight_decay: 0.01
+  warmup_ratio: 0.03
+  clip_grad: 1.0
+runtime:
+  seed: 42
+  gradient_checkpointing: true
+  attention_backend: sdpa
+training:
+  output: checkpoints/opd
+  resume: null
+  rounds: 15
+  steps_per_round: 6
+  prompts_per_rank: 1
+  group_size: 8
+  temperature: 1.0
+  max_new_tokens: 768
+  memory_budget: 128
+  history_frames: 4
+  logit_chunk_size: 32
+  clip_ratio: 0.2
+  save_every: 6
+schedule:
+  mode: pmf
+  lambda_min: 0.2
+  lambda_max: 0.8
+  epsilon: 0.000001
+  fixed_weight: 0.5
+reward:
+  action_weight: 1.0
+  format_weight: 0.1
+  length_weight: 0.1
+  point_tolerance: 0.14
